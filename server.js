@@ -2,15 +2,21 @@ const { channel } = require("diagnostics_channel");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const bd = require("./db/notes.json");
+const bd = require("./db/db.json");
 const uid = require("./helper/uid");
 
 const app = express();
-
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
+app.get("/notes", (req, res) => {
+  res.sendFile(path.join(__dirname, "/public/notes.html"));
+});
 
 //get for front end
 
@@ -31,7 +37,7 @@ app.post("/api/notes", (req, res) => {
     };
     console.log(response);
 
-    fs.readFile("./db/notes.json", "utf8", (err, data) => {
+    fs.readFile("./db/db.json", "utf8", (err, data) => {
       if (err) {
         console.error(err);
       } else {
@@ -43,7 +49,7 @@ app.post("/api/notes", (req, res) => {
 
         // Write updated reviews back to the file
         fs.writeFile(
-          "./db/notes.json",
+          "./db/db.json",
           JSON.stringify(parsednotes, null, 4), /// took this code form the teacher????? what does it
           (writeErr) =>
             writeErr
@@ -66,7 +72,7 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:uid", (req, res) => {
   const { uid } = req.params;
-  fs.readFile("./db/notes.json", "utf8", (err, data) => {
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) {
       console.error(err);
     } else {
@@ -78,7 +84,7 @@ app.delete("/api/notes/:uid", (req, res) => {
         parsednotes = parsednotes.filter((note) => note.uid !== uid);
         // Write updated reviews back to the file
         fs.writeFile(
-          "./db/notes.json",
+          "./db/db.json",
           JSON.stringify(parsednotes, null, 4), /// took this code form the teacher????? what does it
           (writeErr) =>
             writeErr
@@ -106,15 +112,6 @@ app.get("/api/notes", (req, res) => {
   res.status(200).json(bd);
 });
 
-// GET Route for homepage
-app.get("/", (req, res) =>
-  res.sendFile(path.join(__dirname, "/public/index.html"))
-);
-
-app.get("/notes", (req, res) =>
-  res.sendFile(path.join(__dirname, "/public/notes.html"))
-);
-
-app.listen(process.env.PORT || 3001, () =>
-  console.log(`App listening at http://localhost:3001`)
-);
+app.listen(process.env.PORT || 3001, () => {
+  console.log(" The server is running on http://localhost:3001");
+});
