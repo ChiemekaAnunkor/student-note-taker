@@ -7,25 +7,12 @@ const uid = require("./helper/uid");
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-app.get("/notes", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/notes.html"));
-});
-
 //get for front end
-
-app.get("/api/notes", (req, res) => {
-  console.info(`${req.method} was recieved`);
-  res.status(200).json(bd);
-});
-//post
 
 app.post("/api/notes", (req, res) => {
   console.log(req.body);
@@ -69,6 +56,7 @@ app.post("/api/notes", (req, res) => {
     console.info(`${req.method} was recieved`);
     console.log(response);
     res.status(201).json(response);
+    // res.render("/public/index.html");
   } else {
     res.status(500).send("invalid entry, must enter atleast a title");
   }
@@ -112,6 +100,21 @@ app.delete("/api/notes/:uid", (req, res) => {
     }
   });
 });
-app.listen(process.env.PORT, () => {
-  console.log(" The server is running on http://localhost:3001");
+
+app.get("/api/notes", (req, res) => {
+  console.info(`${req.method} was recieved`);
+  res.status(200).json(bd);
 });
+
+// GET Route for homepage
+app.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname, "/public/index.html"))
+);
+
+app.get("/notes", (req, res) =>
+  res.sendFile(path.join(__dirname, "/public/notes.html"))
+);
+
+app.listen(process.env.PORT || 3001, () =>
+  console.log(`App listening at http://localhost:3001`)
+);
