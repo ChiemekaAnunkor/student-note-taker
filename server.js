@@ -1,7 +1,6 @@
 const { channel } = require("diagnostics_channel");
 const express = require("express");
 const fs = require("fs");
-const PORT = 3001;
 const path = require("path");
 const bd = require("./db/db.json");
 const uid = require("./helper/uid");
@@ -113,6 +112,6 @@ app.delete("/api/notes/:uid", (req, res) => {
     }
   });
 });
-app.listen(PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log(" The server is running on http://localhost:3001");
 });
