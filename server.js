@@ -2,7 +2,7 @@ const { channel } = require("diagnostics_channel");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const bd = require("./db/db.json");
+const bd = require("./db/notes.json");
 const uid = require("./helper/uid");
 
 const app = express();
@@ -31,7 +31,7 @@ app.post("/api/notes", (req, res) => {
     };
     console.log(response);
 
-    fs.readFile("./db/db.json", "utf8", (err, data) => {
+    fs.readFile("./db/notes.json", "utf8", (err, data) => {
       if (err) {
         console.error(err);
       } else {
@@ -43,7 +43,7 @@ app.post("/api/notes", (req, res) => {
 
         // Write updated reviews back to the file
         fs.writeFile(
-          "./db/db.json",
+          "./db/notes.json",
           JSON.stringify(parsednotes, null, 4), /// took this code form the teacher????? what does it
           (writeErr) =>
             writeErr
@@ -66,7 +66,7 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:uid", (req, res) => {
   const { uid } = req.params;
-  fs.readFile("./db/db.json", "utf8", (err, data) => {
+  fs.readFile("./db/notes.json", "utf8", (err, data) => {
     if (err) {
       console.error(err);
     } else {
@@ -78,7 +78,7 @@ app.delete("/api/notes/:uid", (req, res) => {
         parsednotes = parsednotes.filter((note) => note.uid !== uid);
         // Write updated reviews back to the file
         fs.writeFile(
-          "./db/db.json",
+          "./db/notes.json",
           JSON.stringify(parsednotes, null, 4), /// took this code form the teacher????? what does it
           (writeErr) =>
             writeErr
