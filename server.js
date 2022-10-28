@@ -1,4 +1,3 @@
-const { channel } = require("diagnostics_channel");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -19,6 +18,13 @@ app.get("/notes", (req, res) => {
 });
 
 //get for front end
+app.get("/api/notes", (req, res) => {
+  console.log(bd);
+  console.info(`${req.method} was recieved`);
+  fs.readFile("./db/db.json", (err, data) => {
+    res.status(200).json(JSON.parse(data));
+  });
+});
 
 app.post("/api/notes", (req, res) => {
   console.log(req.body);
@@ -29,7 +35,7 @@ app.post("/api/notes", (req, res) => {
     const newData = {
       title,
       text,
-      uid: uid(),
+      id: uid(),
     };
     const response = {
       status: "success",
@@ -54,14 +60,11 @@ app.post("/api/notes", (req, res) => {
           (writeErr) =>
             writeErr
               ? console.error(writeErr)
-              : console.info("Successfully updated reviews!")
+              : res.status(200).json(parsednotes)
         );
       }
     });
 
-    console.info(`${req.method} was recieved`);
-    console.log(response);
-    res.status(201).json(response);
     // res.render("/public/index.html");
   } else {
     res.status(500).send("invalid entry, must enter atleast a title");
@@ -105,11 +108,6 @@ app.delete("/api/notes/:uid", (req, res) => {
       }
     }
   });
-});
-
-app.get("/api/notes", (req, res) => {
-  console.info(`${req.method} was recieved`);
-  res.status(200).json(bd);
 });
 
 app.listen(process.env.PORT || 3001, () => {
