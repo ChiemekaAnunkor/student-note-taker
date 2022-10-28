@@ -1,3 +1,4 @@
+const { channel } = require("diagnostics_channel");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
@@ -35,7 +36,7 @@ app.post("/api/notes", (req, res) => {
     const newData = {
       title,
       text,
-      id: uid(),
+      uid: uid(),
     };
     const response = {
       status: "success",
@@ -60,11 +61,14 @@ app.post("/api/notes", (req, res) => {
           (writeErr) =>
             writeErr
               ? console.error(writeErr)
-              : res.status(200).json(parsednotes)
+              : console.info("Successfully updated reviews!")
         );
       }
     });
 
+    console.info(`${req.method} was recieved`);
+    console.log(response);
+    res.status(201).json(response);
     // res.render("/public/index.html");
   } else {
     res.status(500).send("invalid entry, must enter atleast a title");
