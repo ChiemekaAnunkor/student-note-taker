@@ -37,8 +37,10 @@ node index.js
 ```
 
 ## Links
+https://github.com/ChiemekaAnunkor/student-note-takerLinks .
+https://studentnotetaker.herokuapp.com/
 
-## Liscenece
+## license
 
 ![JavaScript Badge](https://img.shields.io/badge/Language-JavaScript-orange)
 ![node Badge](https://img.shields.io/badge/Language-Nodejs-green)
