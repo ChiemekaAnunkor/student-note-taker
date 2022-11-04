@@ -1,4 +1,3 @@
-const { channel } = require("diagnostics_channel");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
